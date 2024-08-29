@@ -8,7 +8,11 @@ const axios = require('axios');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors({
+  origin: 'www.digitalnest.com.ar', // Reemplaza con el dominio de tu frontend
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true
+}));
 app.use(express.json()); // Asegúrate de que tu servidor puede manejar JSON en el cuerpo de las solicitudes
 
 const pool = mysql.createPool({
@@ -70,12 +74,6 @@ app.get('/api/articulos', (req, res) => {
     }
     res.json(results);
   });
-});
-
-// Ruta para obtener el tipo de cambio (modifica según la API externa que estés utilizando)
-app.get('/api/tipocambio', (req, res) => {
-  const tipoCambio = 131.2; // Valor simulado, deberías reemplazarlo con una llamada a una API externa
-  res.json({ tipoCambio });
 });
 
 // Ruta para obtener las categorías
