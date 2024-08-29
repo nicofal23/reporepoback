@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: 'www.digitalnest.com.ar', // Reemplaza con el dominio de tu frontend
+  origin: '*',
   methods: 'GET,POST,PUT,DELETE',
   credentials: true
 }));
