@@ -13,7 +13,9 @@ app.use(cors({
   methods: 'GET,POST,PUT,DELETE',
   credentials: true
 }));
-app.use(express.json()); // Asegúrate de que tu servidor puede manejar JSON en el cuerpo de las solicitudes
+app.use(express.json({ limit: '100mb' }));// Asegúrate de que tu servidor puede manejar JSON en el cuerpo de las solicitudes
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
+
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
