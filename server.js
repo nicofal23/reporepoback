@@ -21,6 +21,16 @@ app.use(cors({
 app.use(express.json({ limit: '100mb' }));// Asegúrate de que tu servidor puede manejar JSON en el cuerpo de las solicitudes
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
+
+const uploadPath = path.join(__dirname, 'uploads', fileName);
+
+// Verifica si la carpeta 'uploads' existe, si no, créala
+const uploadDir = path.dirname(uploadPath);
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+
 // Ruta para recibir y ensamblar los chunks
 app.post('/api/upload-chunk', (req, res) => {
   const { chunkIndex, totalChunks, fileName } = req.body;
