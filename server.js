@@ -3,10 +3,50 @@ const cors = require('cors');
 const mysql = require('mysql2');
 require('dotenv').config();
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+const fileUpload = require('express-fileupload');
 
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(fileUpload());
+
+// Ruta para recibir y ensamblar los chunks
+app.post('/api/upload-chunk', (req, res) => {
+  const { chunkIndex, totalChunks, fileName } = req.body;
+  const chunk = req.files.chunk;
+
+  const uploadPath = path.join(__dirname, 'uploads', fileName);
+
+  // Guardar el chunk en una parte del archivo
+  chunk.mv(`${uploadPath}.part${chunkIndex}`, (err) => {
+    if (err) {
+      console.error('Error al mover el chunk:', err);
+      return res.status(500).send(err);
+    }
+
+    // Si es el último chunk, ensamblar el archivo completo
+    if (parseInt(chunkIndex, 10) === parseInt(totalChunks, 10) - 1) {
+      const writeStream = fs.createWriteStream(uploadPath);
+
+      for (let i = 0; i < totalChunks; i++) {
+        const chunkPath = `${uploadPath}.part${i}`;
+        const data = fs.readFileSync(chunkPath);
+        writeStream.write(data);
+        fs.unlinkSync(chunkPath); // Eliminar el chunk después de escribirlo
+      }
+
+      writeStream.end(() => {
+        console.log('Archivo ensamblado completamente:', fileName);
+        res.send({ message: 'Archivo subido y ensamblado con éxito' });
+      });
+    } else {
+      res.send({ message: `Chunk ${chunkIndex + 1} de ${totalChunks} recibido` });
+    }
+  });
+});
 
 app.use(cors({
   origin: '*',
