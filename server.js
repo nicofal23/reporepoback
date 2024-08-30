@@ -29,7 +29,7 @@ const uploadDir = path.dirname(uploadPath);
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
-
+ 
 
 // Ruta para recibir y ensamblar los chunks
 app.post('/api/upload-chunk', (req, res) => {
