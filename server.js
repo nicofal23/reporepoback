@@ -13,6 +13,14 @@ const port = process.env.PORT || 3000;
 
 app.use(fileUpload());
 
+app.use(cors({
+  origin: '*',
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true
+}));
+app.use(express.json({ limit: '100mb' }));// Asegúrate de que tu servidor puede manejar JSON en el cuerpo de las solicitudes
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
+
 // Ruta para recibir y ensamblar los chunks
 app.post('/api/upload-chunk', (req, res) => {
   const { chunkIndex, totalChunks, fileName } = req.body;
@@ -48,13 +56,7 @@ app.post('/api/upload-chunk', (req, res) => {
   });
 });
 
-app.use(cors({
-  origin: '*',
-  methods: 'GET,POST,PUT,DELETE',
-  credentials: true
-}));
-app.use(express.json({ limit: '100mb' }));// Asegúrate de que tu servidor puede manejar JSON en el cuerpo de las solicitudes
-app.use(express.urlencoded({ limit: '100mb', extended: true }));
+
 
 
 const pool = mysql.createPool({
