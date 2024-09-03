@@ -161,15 +161,15 @@ app.put('/api/articulos/aumentar-precios', (req, res) => {
 // Ruta para actualizar un producto específico por SKU
 app.put('/api/articulos/:sku', (req, res) => {
   const sku = req.params.sku;
-  const { NOMBRE, PRECIO, CATEGORIA, LINK_IMG, descripcion } = req.body;
+  const { NOMBRE, PRECIO, CATEGORIA, LINK_IMG, descripcion, STOCK } = req.body;
 
   const query = `
     UPDATE articulos 
-    SET NOMBRE = ?, PRECIO = ?, CATEGORIA = ?, LINK_IMG = ?, descripcion = ?
+    SET NOMBRE = ?, PRECIO = ?, CATEGORIA = ?, LINK_IMG = ?, descripcion = ?, STOCK = ?
     WHERE SKU = ?
   `;
 
-  pool.query(query, [NOMBRE, PRECIO, CATEGORIA, LINK_IMG, descripcion, sku], (err, results) => {
+  pool.query(query, [NOMBRE, PRECIO, CATEGORIA, LINK_IMG, descripcion, sku, STOCK], (err, results) => {
     if (err) {
       console.error('Error al actualizar el producto:', err);
       return res.status(500).send('Error al actualizar el producto');
