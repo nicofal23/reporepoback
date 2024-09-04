@@ -169,7 +169,7 @@ app.put('/api/articulos/:sku', (req, res) => {
     WHERE SKU = ?
   `;
 
-  pool.query(query, [NOMBRE, PRECIO, CATEGORIA, LINK_IMG, descripcion, sku, STOCK], (err, results) => {
+  pool.query(query, [NOMBRE, PRECIO, CATEGORIA, LINK_IMG, descripcion, STOCK, sku], (err, results) => {
     if (err) {
       console.error('Error al actualizar el producto:', err);
       return res.status(500).send('Error al actualizar el producto');
